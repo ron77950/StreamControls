@@ -1,0 +1,14 @@
+# Normalize text in the repository while respecting local checkout settings.
+* text=auto
+
+# Keep launchers usable on their respective platforms.
+gradlew text eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+
+# Binary assets and the Gradle wrapper must not be line-ending converted.
+*.jar binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary

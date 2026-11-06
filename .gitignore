@@ -1,0 +1,36 @@
+# Android Studio and local tooling
+.idea/
+*.iml
+.gradle/
+.kotlin/
+local.properties
+.DS_Store
+
+# Generated build output and device captures
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+*.hprof
+
+# Local secrets and signing material
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.key
+*.pem
+keystore.properties
+signing.properties
+google-services.json
+client_secret*.json
+credentials.json
+*.credentials.json
+*service-account*.json
+*firebase-adminsdk*.json

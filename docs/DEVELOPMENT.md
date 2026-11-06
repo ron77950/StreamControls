@@ -1,0 +1,9 @@
+# Development
+
+Open the project in Android Studio and install its requested SDK components. On Windows run `gradlew.bat :app:assembleDebug :app:testDebugUnitTest` (or `./gradlew` on other systems). Emulator tests use `:app:connectedDebugAndroidTest`. A release needs separately configured signing; never commit signing keys or credentials.
+
+The single app module uses Compose, Material 3, Navigation Compose, ViewModels and StateFlow, DataStore, AndroidX Auth Tab, Kotlin coroutines, and OkHttp. The YouTube package owns browser authorization, encrypted session storage, identity verification, API calls, and stream state; preferences stores local settings; UI owns presentation. There is no application backend. See [Google OAuth setup](GOOGLE_OAUTH_SETUP.md) for per-signing-certificate client IDs and [Security](SECURITY.md) for the custom scheme and token-storage risks.
+
+Active broadcasts are paginated and filtered to lifecycle `live`. Title updates use `videos.update`, a metadata snapshot, and a subsequent read. End Stream uses `liveBroadcasts.transition` only after confirmation and checks the same channel, broadcast, and live status before sending the transition; a subsequent read must confirm completion. Neither uncertain write is automatically retried. Unit and emulator tests use fake credentials and responses. Perform real tests only on an explicitly selected disposable broadcast and stop its encoder separately.
+
+Title confirmation reads the video's ID, channel ID, and title without requiring writable metadata or an ETag. The app waits 750 ms before each of up to three reads when the title differs or a transient read fails; it does not repeat the write. The update controls remain disabled while confirmation is in progress. A remaining mismatch is shown for review, while an unavailable read remains explicitly unconfirmed. These extra reads consume YouTube API quota.

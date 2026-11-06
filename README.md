@@ -6,6 +6,12 @@ StreamControl is an Android app for managing YouTube and Twitch livestreams from
 
 **Status:** StreamControl is in development. Prebuilt APKs will be available in [GitHub Releases](https://github.com/ron77950/StreamControls/releases).
 
+## Screenshots
+
+Example accounts and streams are shown.
+
+<img src="docs/screenshots/streams.png" alt="Streams screen with example live streams" width="260"> <img src="docs/screenshots/accounts.png" alt="Accounts screen with example YouTube and Twitch channels" width="260">
+
 ## What it does
 
 - Connect multiple YouTube and Twitch channels and see their active streams together.

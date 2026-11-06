@@ -8,6 +8,7 @@ local.properties
 
 # Generated build output and device captures
 build/
+/app/release/
 captures/
 .externalNativeBuild/
 .cxx/

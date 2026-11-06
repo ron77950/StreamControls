@@ -45,7 +45,7 @@ private fun postTwitchConnectedNotification(context: Context) {
     val notification = NotificationCompat.Builder(context, CHANNEL_ID)
         .setSmallIcon(R.drawable.ic_broadcast)
         .setContentTitle("Twitch connected")
-        .setContentText("Tap to return to StreamControl.")
+        .setContentText("Tap to return to Stream Controls.")
         .setContentIntent(pending)
         .setAutoCancel(true)
         .build()

@@ -124,7 +124,7 @@ fun StreamControlApp(settings: Preferences, setTheme: (ThemePreference) -> Unit,
         }
     }
     if (consent) AlertDialog(onDismissRequest = { consent = false }, title = { Text("Connect YouTube") },
-        text = { Text("Google will ask you to grant YouTube account management access. This permission is broader than the app's stream controls. StreamControl uses it to find your channel and manage the selected livestream. Select the intended YouTube channel.") },
+        text = { Text("Google will ask you to grant YouTube account management access. This permission is broader than the app's stream controls. Stream Controls uses it to find your channel and manage the selected livestream. Select the intended YouTube channel.") },
         confirmButton = { TextButton(onClick = { consent = false; chooseAccount() }) { Text("Continue with Google") } },
         dismissButton = { TextButton(onClick = { consent = false }) { Text("Cancel") } })
     state.conflictTitle?.let { current ->
@@ -180,7 +180,7 @@ private fun DashboardHeader() {
                 Icon(painterResource(R.drawable.ic_broadcast), contentDescription = null, tint = MaterialTheme.colorScheme.primary, modifier = Modifier.size(27.dp))
             }
         }
-        Header("StreamControl", "Manage your live stream")
+        Header("Stream Controls", "Manage your live stream")
     }
 }
 
@@ -552,7 +552,7 @@ private fun AccountsScreen(state: StreamsState, onConnect: () -> Unit, onConnect
     if (confirmDisconnect) AlertDialog(
         onDismissRequest = { confirmDisconnect = false },
         title = { Text(if (disconnectChannel?.platform == Platform.TWITCH) "Disconnect Twitch?" else "Disconnect YouTube?") },
-        text = { Text(if (disconnectChannel?.platform == Platform.TWITCH) "Disconnect ‘${disconnectChannel?.name}’ from Twitch? StreamControl will remove the local connection and ask Twitch to revoke access." else "Disconnect ${disconnectChannel?.name?.let { "‘$it’ from YouTube" } ?: "this YouTube connection"}? StreamControl will remove the local connection and ask Google to revoke access. Google may also revoke access for other connected channels or clients on the same account and project.") },
+        text = { Text(if (disconnectChannel?.platform == Platform.TWITCH) "Disconnect ‘${disconnectChannel?.name}’ from Twitch? Stream Controls will remove the local connection and ask Twitch to revoke access." else "Disconnect ${disconnectChannel?.name?.let { "‘$it’ from YouTube" } ?: "this YouTube connection"}? Stream Controls will remove the local connection and ask Google to revoke access. Google may also revoke access for other connected channels or clients on the same account and project.") },
         confirmButton = { TextButton(onClick = {
             confirmDisconnect = false
             disconnectChannel?.id?.takeIf { id -> state.channels.any { it.id == id } }?.let(onDisconnect)
@@ -580,7 +580,7 @@ private fun SettingsScreen(settings: Preferences, setTheme: (ThemePreference) ->
     var showEditor by remember { mutableStateOf(false) }
     var presetText by remember { mutableStateOf("") }
     Screen {
-        Header("Settings", "Personalize StreamControl")
+        Header("Settings", "Personalize Stream Controls")
         Text("Appearance", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
         ThemePreference.entries.forEach { theme ->
             Row(Modifier.fillMaxWidth().clickable { setTheme(theme) }, verticalAlignment = Alignment.CenterVertically) {
@@ -620,7 +620,7 @@ private fun SettingsScreen(settings: Preferences, setTheme: (ThemePreference) ->
         OutlinedButton(onClick = { editingIndex = -1; presetText = ""; showEditor = true }) { Text("Add preset") }
         HorizontalDivider()
         Text("Privacy", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-        Text("StreamControl communicates directly with Google, YouTube, and Twitch. It has no analytics or advertising. Google authorization grants broader YouTube access than title editing.")
+        Text("Stream Controls communicates directly with Google, YouTube, and Twitch. It has no analytics or advertising. Google authorization grants broader YouTube access than title editing.")
         TextButton(onClick = onAccounts) { Text("Connected accounts") }
         TextButton(onClick = onNotices) { Text("Third-party notices") }
         Text("Version 1.0 - Development build", color = MaterialTheme.colorScheme.onSurfaceVariant)

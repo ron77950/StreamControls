@@ -1,10 +1,10 @@
 # Security
 
-StreamControl is under development and has not undergone an independent security assessment. Some real-account flows have been tested, but broader testing of account restoration, multiple accounts, and stream management is still needed.
+Stream Controls is under development and has not undergone an independent security assessment. Some real-account flows have been tested, but broader testing of account restoration, multiple accounts, and stream management is still needed.
 
 ## Account access
 
-YouTube and Twitch authorization takes place through their respective services. StreamControl requests access to manage your broadcasts; these permissions are broader than changing a stream title. Review the permissions shown by each service before approving access.
+YouTube and Twitch authorization takes place through their respective services. Stream Controls requests access to manage your broadcasts; these permissions are broader than changing a stream title. Review the permissions shown by each service before approving access.
 
 Saved account credentials are encrypted and stored in the app's private storage on your device. The app connects directly to the services and does not use a developer-operated backend. Android backups and device transfers are disabled for the app's local data.
 
@@ -18,7 +18,7 @@ The flow uses PKCE to help protect intercepted authorization codes, but this doe
 
 ## Stream actions
 
-StreamControl checks the selected channel and stream before making changes. Ending a YouTube broadcast requires confirmation. Network failures can make the outcome of an operation uncertain; check the stream's current state before trying again. Ending a YouTube broadcast does not necessarily stop streaming software from sending video.
+Stream Controls checks the selected channel and stream before making changes. Ending a YouTube broadcast requires confirmation. Network failures can make the outcome of an operation uncertain; check the stream's current state before trying again. Ending a YouTube broadcast does not necessarily stop streaming software from sending video.
 
 ## Reporting a security concern
 

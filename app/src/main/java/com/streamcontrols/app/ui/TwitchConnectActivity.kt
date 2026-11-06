@@ -77,7 +77,7 @@ class TwitchConnectActivity : ComponentActivity() {
                 Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                 Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(24.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     Text("Connect Twitch", style = MaterialTheme.typography.headlineSmall)
-                    Text("Authorize StreamControl to manage your Twitch stream.")
+                    Text("Authorize Stream Controls to manage your Twitch stream.")
                     Text(message)
                     if (userCode != null && settings.accountConnectionNotifications && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                         ContextCompat.checkSelfPermission(this@TwitchConnectActivity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
@@ -124,7 +124,7 @@ class TwitchConnectActivity : ComponentActivity() {
                 verificationUri = attempt.verificationUri
                 deadlineAt = SystemClock.elapsedRealtime() + attempt.expiresSeconds * 1000
                 userCode = attempt.userCode
-                message = "Open Twitch and approve the connection. You can then close the authorization tab to return to StreamControl. If asked, enter the code shown here."
+                message = "Open Twitch and approve the connection. You can then close the authorization tab to return to Stream Controls. If asked, enter the code shown here."
                 status = "Waiting for Twitch authorization..."
                 val deadline = deadlineAt
                 var interval = attempt.intervalSeconds

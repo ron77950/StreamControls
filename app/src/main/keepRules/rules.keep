@@ -4,6 +4,9 @@
 # For more details, see
 #   https://d.android.com/r/tools/r8/keep-rules
 
+# Keep related Kotlin classes in their original packages to avoid release-time access errors.
+-dontrepackage
+
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
 # class:

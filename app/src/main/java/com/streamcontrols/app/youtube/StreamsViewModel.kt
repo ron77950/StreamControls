@@ -356,7 +356,7 @@ class StreamsViewModel(private val api: YouTubeApi, private val preferences: App
             else -> "Twitch could not complete the request. Please try again."
         }
         is NoYouTubeChannel -> NO_CHANNELS_RETURNED_MESSAGE
-        is MultipleYouTubeChannels -> "YouTube returned multiple channels for this account. StreamControl cannot safely choose one yet."
+        is MultipleYouTubeChannels -> "YouTube returned multiple channels for this account. Stream Controls cannot safely choose one yet."
         is IncompleteResponse, is org.json.JSONException -> "YouTube returned an incomplete response. Please try again."
         is AuthorizationRequired -> "Authorization is unavailable. Reconnect YouTube."
         is WrongChannel -> "The authorized YouTube channel changed. Reconnect to review the channel before continuing."

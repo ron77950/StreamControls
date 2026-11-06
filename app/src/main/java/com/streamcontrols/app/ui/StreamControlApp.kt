@@ -240,7 +240,14 @@ internal fun ChannelCard(channel: Channel?, reconnect: Boolean, platform: Platfo
 private fun StreamsScreen(state: StreamsState, presets: List<String>, onSelect: (LiveStream) -> Unit, onEdit: (String) -> Unit, onUpdate: () -> Unit, onRefresh: () -> Unit, onAccounts: () -> Unit, onConnect: () -> Unit) {
     Screen {
         DashboardHeader()
-        if (state.channels.size > 1) {
+        if (state.channels.isEmpty()) {
+            Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surface, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
+                Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(if (state.reconnect) "Reconnect required" else "Not connected", modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
+                    FilledTonalButton(onClick = onAccounts, contentPadding = PaddingValues(horizontal = 16.dp)) { Text("Accounts") }
+                }
+            }
+        } else if (state.channels.size > 1) {
             Surface(shape = RoundedCornerShape(12.dp), color = MaterialTheme.colorScheme.surface, border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)) {
                 Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("${state.channels.size} channels", modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleMedium)
@@ -257,9 +264,6 @@ private fun StreamsScreen(state: StreamsState, presets: List<String>, onSelect: 
         if (state.channels.isEmpty()) {
             Text("Active Streams", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text("Connect an account to find and manage your active streams.", color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Button(onClick = onAccounts, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), shape = RoundedCornerShape(10.dp)) {
-                Text("Go to Accounts")
-            }
         } else {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("Active Streams", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -291,6 +295,7 @@ private fun StreamManagementScreen(state: StreamsState, presets: List<String>, o
         else {
             StreamCard(selected, selectedChannel?.name.orEmpty(), selected = true, enabled = false)
             var editing by remember(selected.id) { mutableStateOf(false) }
+            var choosingStream by remember(selected.id) { mutableStateOf(false) }
             if (!editing) {
                 Button(onClick = { editing = true }, enabled = !state.busy && selectedChannel != null && selected.channelId !in state.reconnectIds, modifier = Modifier.fillMaxWidth()) { Text("Edit Title") }
                 if (selected.platform == Platform.YOUTUBE) {
@@ -317,6 +322,33 @@ private fun StreamManagementScreen(state: StreamsState, presets: List<String>, o
                     val error = streamTitleError(state.draft, selected.platform)
                     if (error != null) Text(error, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                     Text("${titleCharacterCount(state.draft)}/${titleLimit(selected.platform)}", modifier = Modifier.align(Alignment.End), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                val otherStreams = state.streams.filter { it.id != selected.id }
+                if (otherStreams.isNotEmpty()) {
+                    OutlinedButton(onClick = { choosingStream = true }, enabled = !state.busy, modifier = Modifier.fillMaxWidth()) {
+                        Text("Copy title from another stream")
+                    }
+                }
+                if (choosingStream) {
+                    AlertDialog(
+                        onDismissRequest = { choosingStream = false },
+                        title = { Text("Copy stream title") },
+                        text = {
+                            Column(Modifier.heightIn(max = 400.dp).verticalScroll(rememberScrollState())) {
+                                if (otherStreams.isEmpty()) Text("No other active streams are available.")
+                                otherStreams.forEach { stream ->
+                                    val channelName = state.channels.find { it.id == stream.channelId }?.name
+                                    TextButton(onClick = { onEdit(stream.title); choosingStream = false }, enabled = !state.busy, modifier = Modifier.fillMaxWidth()) {
+                                        Column(Modifier.fillMaxWidth()) {
+                                            Text(stream.title, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                                            Text(listOfNotNull(channelName, if (stream.platform == Platform.YOUTUBE) "YouTube" else "Twitch").joinToString(" · "), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        confirmButton = { TextButton(onClick = { choosingStream = false }) { Text("Cancel") } }
+                    )
                 }
                 if (presets.isNotEmpty()) {
                     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {

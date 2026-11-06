@@ -4,15 +4,15 @@
 
 StreamControl is an Android app for managing YouTube and Twitch livestreams from one place. Connect your channels, see which streams are live, and update their titles without opening each platform's dashboard.
 
-**Status:** StreamControl is in development. Some real-account flows have been tested, but multi-account behavior, session restoration, and stream management still need broader device and account testing. No prebuilt APK is included in this repository.
+**Status:** StreamControl is in development. Prebuilt APKs will be available in [GitHub Releases](https://github.com/ron77950/StreamControls/releases).
 
 ## What it does
 
-- Connect multiple YouTube and Twitch channels and see their active streams together, with the channel shown on each card.
-- Edit a live stream's title and save reusable title presets on your device.
-- End a YouTube broadcast after confirmation. To end a Twitch stream, stop it in your streaming software.
-- Choose a light, dark, or system theme, and control account-connection notifications in Settings.
-- Disconnect channels individually and request that the provider revoke access.
+- Connect multiple YouTube and Twitch channels and see their active streams together.
+- Edit a live stream's title, copy a title from another live stream, and save reusable title presets on your device.
+- End a YouTube broadcast after confirmation.
+
+StreamControl cannot end Twitch streams; stop them in your streaming software.
 
 Ending a YouTube broadcast doesn't necessarily stop your streaming software from sending video. Stop the encoder separately when needed.
 
@@ -20,7 +20,7 @@ Ending a YouTube broadcast doesn't necessarily stop your streaming software from
 
 - An Android phone or tablet running Android 8.0 (API 26) or later, with internet access.
 - A YouTube or Twitch channel with permission to use its platform's API. YouTube livestreaming must be enabled on the channel to manage live broadcasts.
-- For YouTube, a browser that supports Android Auth Tab. StreamControl prefers a compatible Chrome installation, even if it isn't the default browser.
+- Chrome is recommended for connecting accounts. Other browsers can work; YouTube sign-in requires one that supports Auth Tab.
 - For a source build, Android Studio and the SDK components requested by the project. YouTube sign-in also needs a Google OAuth client configured for the build's signing certificate.
 
 ## Build and run
@@ -35,10 +35,14 @@ The project includes a public Twitch client ID; no Twitch client secret is embed
 
 Open **Accounts** in StreamControl and choose a platform:
 
-- **YouTube:** Sign in through Google, select the intended YouTube channel when prompted, and confirm the channel shown in StreamControl. Google asks for broad YouTube account access; it isn't limited to changing stream titles. Access also depends on your channel's eligibility and permissions and the Google project's OAuth audience and verification status.
-- **Twitch:** Open Twitch from the connection screen, sign in and approve access. Enter the displayed code if Twitch asks for it. StreamControl requests permission to manage broadcast settings, which is broader than title editing. After approval, return to StreamControl to see the connected channel.
+- **YouTube:** Sign in through Google, select the intended YouTube channel when prompted, and confirm the channel shown in StreamControl. Google asks for permission to manage your YouTube account, which allows more than the stream management features this app uses. Access also depends on your channel's eligibility and permissions and the Google project's OAuth audience and verification status.
+- **Twitch:** Open Twitch from the connection screen, sign in and approve access. Enter the displayed code if Twitch asks for it. Twitch asks for permission to manage your channel's broadcast configuration, which also covers settings and features beyond the title changes this app uses. After approval, return to StreamControl to see the connected channel.
 
-Twitch may open its Android app after approval on some devices. If it shows a black screen, return to StreamControl; the connection may already have succeeded. When permitted, StreamControl can show a notification after the account connects. Notifications can be turned off in **Settings → Notifications** or in Android's settings.
+> [!IMPORTANT]
+> YouTube sign-in for the release app is currently limited to approved testers. To use it, the developer must add your Google account email to the tester list. Google requires an app homepage on a verified domain as part of its OAuth verification process for wider public access. Twitch does not use this tester list.
+
+> [!NOTE]
+> Twitch may open its Android app after approval on some devices. If it shows a black screen, return to StreamControl; the connection may already have succeeded. When permitted, StreamControl can show a notification after the account connects. Notifications can be turned off in **Settings → Notifications** or in Android's settings.
 
 ## Using streams and presets
 
@@ -48,7 +52,9 @@ Select a stream to manage it. YouTube titles can be up to 100 characters and can
 
 ## Privacy and security
 
-StreamControl communicates directly with Google, YouTube, and Twitch and loads images from their image hosts. It has no developer-operated backend, advertising, or analytics. Refresh tokens are encrypted using Android Keystore and kept in app-private storage; access tokens remain in memory. Presets and settings are stored locally.
+StreamControl communicates directly with Google, YouTube, and Twitch. It has no developer-operated backend, advertising, or analytics. Saved account credentials are encrypted and stored locally on your device. Presets and settings are also stored locally.
+
+The permissions requested by YouTube and Twitch cover more than StreamControl currently uses. Google's permission allows management of your YouTube account; StreamControl uses it to find live broadcasts, change their titles, and end broadcasts you confirm. Twitch's permission allows management of broadcast configuration, including settings, stream markers, and tags; StreamControl uses it to update stream titles.
 
 Disconnecting removes the local connection and attempts to revoke provider access. If revocation fails, the app reports that the disconnect was local only. Google revocation may also affect other channels or clients associated with the same account and project. See the [security guide](docs/SECURITY.md) for details and limitations.
 

@@ -138,6 +138,11 @@ internal class TwitchApi(private val clientId: String, client: OkHttpClient = Ok
         if (item.getString("broadcaster_id") != id) throw TwitchReconnect()
         return item.getString("title")
     }
+    suspend fun withChannelTitle(token: String, id: String, streams: List<LiveStream>): List<LiveStream> {
+        if (streams.isEmpty()) return streams
+        val currentTitle = title(token, id)
+        return streams.map { it.copy(title = currentTitle) }
+    }
     suspend fun updateTitle(token: String, id: String, title: String) {
         require(isValidStreamTitle(title, Platform.TWITCH)) { "Invalid Twitch title" }
         val body = JSONObject().put("title", title).toString().toRequestBody("application/json; charset=utf-8".toMediaType())

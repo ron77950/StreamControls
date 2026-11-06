@@ -112,6 +112,24 @@ class TwitchApiTest {
         catch (_: TwitchResponseInvalid) { }
     }
 
+    @Test fun refreshUsesChannelTitleForLiveStreamsWithoutRequestingItForOfflineChannels() = runBlocking {
+        var requests = 0
+        val client = OkHttpClient.Builder().addInterceptor { chain ->
+            requests++
+            when (chain.request().url.encodedPath) {
+                "/helix/streams" -> response(chain, """{"data":[{"id":"987","user_id":"123","type":"live","title":"Old"}]}""")
+                "/helix/channels" -> response(chain, """{"data":[{"broadcaster_id":"123","title":"New"}]}""")
+                else -> error("Unexpected request")
+            }
+        }.build()
+        val api = TwitchApi("client", client)
+        val streams = api.streams("token", "123")
+        assertEquals("New", api.withChannelTitle("token", "123", streams).single().title)
+        assertEquals(2, requests)
+        assertTrue(api.withChannelTitle("token", "123", emptyList()).isEmpty())
+        assertEquals(2, requests)
+    }
+
     private class FakeVault : CredentialStore {
         var saved: SavedCredential? = SavedCredential("old-refresh", Channel("twitch:123", "Test", platform = Platform.TWITCH), null)
         override fun persist(saved: SavedCredential) { this.saved = saved }

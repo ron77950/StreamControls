@@ -149,7 +149,20 @@ class StreamsViewModel(private val api: YouTubeApi, private val preferences: App
                     if (resolved.id != channel.id) throw WrongChannel()
                     resolvedChannels.add(resolved)
                     reconnect.remove(channel.id)
-                    streams.addAll(if (channel.platform == Platform.TWITCH) TwitchSession.api().streams(token, channel.id.removePrefix(TWITCH_PREFIX)) else api.streams(token, channel.id))
+                    if (channel.platform == Platform.TWITCH) {
+                        val twitch = TwitchSession.api()
+                        val broadcasterId = channel.id.removePrefix(TWITCH_PREFIX)
+                        val liveStreams = twitch.streams(token, broadcasterId)
+                        val firstIndex = streams.size
+                        streams.addAll(liveStreams)
+                        // Stream and channel endpoints may return different titles after an update.
+                        val updatedStreams = twitch.withChannelTitle(token, broadcasterId, liveStreams)
+                        updatedStreams.forEachIndexed { index, stream ->
+                            streams[firstIndex + index] = stream
+                        }
+                    } else {
+                        streams.addAll(api.streams(token, channel.id))
+                    }
                 } catch (e: CancellationException) { throw e }
                 catch (e: Exception) {
                     if (resolvedChannels.none { it.id == channel.id }) resolvedChannels.add(channel)

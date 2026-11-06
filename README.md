@@ -10,7 +10,7 @@ StreamControl is an Android app for managing YouTube and Twitch livestreams from
 
 Example accounts and streams are shown.
 
-<img src="docs/screenshots/streams.png" alt="Streams screen with example live streams" width="260"> <img src="docs/screenshots/accounts.png" alt="Accounts screen with example YouTube and Twitch channels" width="260">
+<img src="docs/screenshots/streams.png" alt="Streams screen with example live streams" width="260"> <img src="docs/screenshots/manage.png" alt="YouTube stream management screen with Edit Title and End Stream options" width="260"> <img src="docs/screenshots/accounts.png" alt="Accounts screen with example YouTube and Twitch channels" width="260">
 
 ## What it does
 
